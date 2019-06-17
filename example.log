@@ -1,0 +1,464 @@
+XORing
+'ATTACK AT DAWN!' ↘
+	| 41 43 54 57 |
+	| 54 4B 20 4E |
+	| 54 20 44 21 |
+	| 41 41 41 01 |
+with 'SOME 128 BIT KEY' ↘
+	| 53 20 20 20 |
+	| 4F 31 42 4B |
+	| 4D 32 49 45 |
+	| 45 38 54 59 |
+Result: ↘
+	| 12 63 74 77 |
+	| 1B 7A 62 05 |
+	| 19 12 0D 64 |
+	| 04 79 15 58 |
+---
+Expanded key 'SOME 128 BIT KEY' ↘
+	| 53 20 20 20 |
+	| 4F 31 42 4B |
+	| 4D 32 49 45 |
+	| 45 38 54 59 |
+to
+'Key 1' ↘
+	| E1 C1 E1 C1 |
+	| 21 10 52 19 |
+	| 86 B4 FD B8 |
+	| F2 CA 9E C7 |
+[Keys 2..9]
+'Key 10' ↘
+	| 3E 98 38 EC |
+	| A2 7A DC 19 |
+	| 22 5F 25 FC |
+	| A7 4A 4F 49 |
+---
+Confused (sbox, SubBytes)
+'Result matrix of previous round 0' ↘
+	| 12 63 74 77 |
+	| 1B 7A 62 05 |
+	| 19 12 0D 64 |
+	| 04 79 15 58 |
+to
+'Confused matrix of round 1' ↘
+	| C9 FB 92 F5 |
+	| AF DA AA 6B |
+	| D4 C9 D7 43 |
+	| F2 B6 59 6A |
+---
+Diffused (ShiftRows)
+'Confused matrix of round 1'
+to
+'Diffused matrix of round 1' ↘
+	| C9 FB 92 F5 |
+	| DA AA 6B AF |
+	| D7 43 D4 C9 |
+	| 6A F2 B6 59 |
+---
+Mixed columns (MixColumns) of
+'Diffused matrix of round 1' to
+'Mixed matrix of round 1' ↘
+	| A0 78 01 4A |
+	| 4F 93 C7 B0 |
+	| 9E 6E 76 80 |
+	| 6B CA FB 17 |
+---
+Merged (XOR)
+'Mixed matrix of round 1' with
+'Round key' ↘
+	| E1 C1 E1 C1 |
+	| 21 10 52 19 |
+	| 86 B4 FD B8 |
+	| F2 CA 9E C7 |
+to 'Final matrix of round 1' ↘
+	| A0 78 01 4A |
+	| 4F 93 C7 B0 |
+	| 9E 6E 76 80 |
+	| 6B CA FB 17 |
+---
+Confused (sbox, SubBytes)
+'Result matrix of previous round 1' ↘
+	| A0 78 01 4A |
+	| 4F 93 C7 B0 |
+	| 9E 6E 76 80 |
+	| 6B CA FB 17 |
+to
+'Confused matrix of round 2' ↘
+	| E0 BC 7C D6 |
+	| 84 DC C6 E7 |
+	| 0B 9F 38 CD |
+	| 7F 74 0F F0 |
+---
+Diffused (ShiftRows)
+'Confused matrix of round 2'
+to
+'Diffused matrix of round 2' ↘
+	| E0 BC 7C D6 |
+	| DC C6 E7 84 |
+	| 38 CD 0B 9F |
+	| F0 7F 74 0F |
+---
+Mixed columns (MixColumns) of
+'Diffused matrix of round 2' to
+'Mixed matrix of round 2' ↘
+	| 5B 76 A2 66 |
+	| B6 45 CF 66 |
+	| 07 8E 18 D7 |
+	| AE 6A 5E 7D |
+---
+Merged (XOR)
+'Mixed matrix of round 2' with
+'Round key' ↘
+	| 37 F6 17 D6 |
+	| 4D 5D 0F 16 |
+	| 40 F4 09 B1 |
+	| 8A 40 DE 19 |
+to 'Final matrix of round 2' ↘
+	| 5B 76 A2 66 |
+	| B6 45 CF 66 |
+	| 07 8E 18 D7 |
+	| AE 6A 5E 7D |
+---
+Confused (sbox, SubBytes)
+'Result matrix of previous round 2' ↘
+	| 5B 76 A2 66 |
+	| B6 45 CF 66 |
+	| 07 8E 18 D7 |
+	| AE 6A 5E 7D |
+to
+'Confused matrix of round 3' ↘
+	| 39 38 3A 33 |
+	| 4E 6E 8A 33 |
+	| C5 19 AD 0E |
+	| E4 02 58 FF |
+---
+Diffused (ShiftRows)
+'Confused matrix of round 3'
+to
+'Diffused matrix of round 3' ↘
+	| 39 38 3A 33 |
+	| 6E 8A 33 4E |
+	| AD 0E C5 19 |
+	| FF E4 02 58 |
+---
+Mixed columns (MixColumns) of
+'Diffused matrix of round 3' to
+'Mixed matrix of round 3' ↘
+	| E6 9D 73 B6 |
+	| 73 19 DD 1D |
+	| 98 F9 F7 7F |
+	| 11 23 5E 49 |
+---
+Merged (XOR)
+'Mixed matrix of round 3' with
+'Round key' ↘
+	| 74 82 95 43 |
+	| 85 D8 D7 C1 |
+	| 94 60 69 D8 |
+	| 7C 3C E2 FB |
+to 'Final matrix of round 3' ↘
+	| E6 9D 73 B6 |
+	| 73 19 DD 1D |
+	| 98 F9 F7 7F |
+	| 11 23 5E 49 |
+---
+Confused (sbox, SubBytes)
+'Result matrix of previous round 3' ↘
+	| E6 9D 73 B6 |
+	| 73 19 DD 1D |
+	| 98 F9 F7 7F |
+	| 11 23 5E 49 |
+to
+'Confused matrix of round 4' ↘
+	| 8E 5E 8F 4E |
+	| 8F D4 C1 A4 |
+	| 46 99 68 D2 |
+	| 82 26 58 3B |
+---
+Diffused (ShiftRows)
+'Confused matrix of round 4'
+to
+'Diffused matrix of round 4' ↘
+	| 8E 5E 8F 4E |
+	| D4 C1 A4 8F |
+	| 68 D2 46 99 |
+	| 3B 82 26 58 |
+---
+Mixed columns (MixColumns) of
+'Diffused matrix of round 4' to
+'Mixed matrix of round 4' ↘
+	| 37 32 81 87 |
+	| 5A 14 DB 89 |
+	| 5C 46 5F 4A |
+	| 25 B4 9C 37 |
+---
+Merged (XOR)
+'Mixed matrix of round 4' with
+'Round key' ↘
+	| 04 86 13 50 |
+	| E4 3C EB 2A |
+	| 9B FB 92 4A |
+	| 66 5A B8 43 |
+to 'Final matrix of round 4' ↘
+	| 37 32 81 87 |
+	| 5A 14 DB 89 |
+	| 5C 46 5F 4A |
+	| 25 B4 9C 37 |
+---
+Confused (sbox, SubBytes)
+'Result matrix of previous round 4' ↘
+	| 37 32 81 87 |
+	| 5A 14 DB 89 |
+	| 5C 46 5F 4A |
+	| 25 B4 9C 37 |
+to
+'Confused matrix of round 5' ↘
+	| 9A 23 0C 17 |
+	| BE FA B9 A7 |
+	| 4A 5A CF D6 |
+	| 3F 8D DE 9A |
+---
+Diffused (ShiftRows)
+'Confused matrix of round 5'
+to
+'Diffused matrix of round 5' ↘
+	| 9A 23 0C 17 |
+	| FA B9 A7 BE |
+	| CF D6 4A 5A |
+	| 9A 3F 8D DE |
+---
+Mixed columns (MixColumns) of
+'Diffused matrix of round 5' to
+'Mixed matrix of round 5' ↘
+	| 9E 08 49 47 |
+	| 97 1A EF 8F |
+	| D1 16 5B C6 |
+	| 9A 1B 2F EE |
+---
+Merged (XOR)
+'Mixed matrix of round 5' with
+'Round key' ↘
+	| F1 77 64 34 |
+	| 32 0E E5 CF |
+	| 81 7A E8 A2 |
+	| 35 6F D7 94 |
+to 'Final matrix of round 5' ↘
+	| 9E 08 49 47 |
+	| 97 1A EF 8F |
+	| D1 16 5B C6 |
+	| 9A 1B 2F EE |
+---
+Confused (sbox, SubBytes)
+'Result matrix of previous round 5' ↘
+	| 9E 08 49 47 |
+	| 97 1A EF 8F |
+	| D1 16 5B C6 |
+	| 9A 1B 2F EE |
+to
+'Confused matrix of round 6' ↘
+	| 0B 30 3B A0 |
+	| 88 A2 DF 73 |
+	| 3E 47 39 B4 |
+	| B8 AF 15 28 |
+---
+Diffused (ShiftRows)
+'Confused matrix of round 6'
+to
+'Diffused matrix of round 6' ↘
+	| 0B 30 3B A0 |
+	| A2 DF 73 88 |
+	| 39 B4 3E 47 |
+	| 28 B8 AF 15 |
+---
+Mixed columns (MixColumns) of
+'Diffused matrix of round 6' to
+'Mixed matrix of round 6' ↘
+	| A1 3A 3A F6 |
+	| 3F EC D3 5B |
+	| 00 96 EF 0A |
+	| FB 12 D0 1F |
+---
+Merged (XOR)
+'Mixed matrix of round 6' with
+'Round key' ↘
+	| 5B 2C 48 7C |
+	| 08 06 E3 2C |
+	| A3 D9 31 93 |
+	| 2D 42 95 01 |
+to 'Final matrix of round 6' ↘
+	| A1 3A 3A F6 |
+	| 3F EC D3 5B |
+	| 00 96 EF 0A |
+	| FB 12 D0 1F |
+---
+Confused (sbox, SubBytes)
+'Result matrix of previous round 6' ↘
+	| A1 3A 3A F6 |
+	| 3F EC D3 5B |
+	| 00 96 EF 0A |
+	| FB 12 D0 1F |
+to
+'Confused matrix of round 7' ↘
+	| 32 80 80 42 |
+	| 75 CE 66 39 |
+	| 63 90 DF 67 |
+	| 0F C9 70 C0 |
+---
+Diffused (ShiftRows)
+'Confused matrix of round 7'
+to
+'Diffused matrix of round 7' ↘
+	| 32 80 80 42 |
+	| CE 66 39 75 |
+	| DF 67 63 90 |
+	| C0 0F C9 70 |
+---
+Mixed columns (MixColumns) of
+'Diffused matrix of round 7' to
+'Mixed matrix of round 7' ↘
+	| 58 9F F4 89 |
+	| DB 38 AF 6E |
+	| DD 3F 08 38 |
+	| E1 FB A2 28 |
+---
+Merged (XOR)
+'Mixed matrix of round 7' with
+'Round key' ↘
+	| 6A 46 0E 72 |
+	| D4 D2 31 1D |
+	| DF 06 37 A4 |
+	| 3D 7F EA EB |
+to 'Final matrix of round 7' ↘
+	| 58 9F F4 89 |
+	| DB 38 AF 6E |
+	| DD 3F 08 38 |
+	| E1 FB A2 28 |
+---
+Confused (sbox, SubBytes)
+'Result matrix of previous round 7' ↘
+	| 58 9F F4 89 |
+	| DB 38 AF 6E |
+	| DD 3F 08 38 |
+	| E1 FB A2 28 |
+to
+'Confused matrix of round 8' ↘
+	| 6A DB BF A7 |
+	| B9 07 79 9F |
+	| C1 75 30 07 |
+	| F8 0F 3A 34 |
+---
+Diffused (ShiftRows)
+'Confused matrix of round 8'
+to
+'Diffused matrix of round 8' ↘
+	| 6A DB BF A7 |
+	| 07 79 9F B9 |
+	| 30 07 C1 75 |
+	| 34 F8 0F 3A |
+---
+Mixed columns (MixColumns) of
+'Diffused matrix of round 8' to
+'Mixed matrix of round 8' ↘
+	| 97 D1 17 BE |
+	| 9D 97 B3 08 |
+	| 67 8F AF 19 |
+	| 9C E1 72 49 |
+---
+Merged (XOR)
+'Mixed matrix of round 8' with
+'Round key' ↘
+	| 4E 08 06 74 |
+	| 9D 4F 7E 63 |
+	| 36 30 07 A3 |
+	| 7D 02 E8 03 |
+to 'Final matrix of round 8' ↘
+	| 97 D1 17 BE |
+	| 9D 97 B3 08 |
+	| 67 8F AF 19 |
+	| 9C E1 72 49 |
+---
+Confused (sbox, SubBytes)
+'Result matrix of previous round 8' ↘
+	| 97 D1 17 BE |
+	| 9D 97 B3 08 |
+	| 67 8F AF 19 |
+	| 9C E1 72 49 |
+to
+'Confused matrix of round 9' ↘
+	| 88 3E F0 AE |
+	| 5E 88 6D 30 |
+	| 85 73 79 D4 |
+	| DE F8 40 3B |
+---
+Diffused (ShiftRows)
+'Confused matrix of round 9'
+to
+'Diffused matrix of round 9' ↘
+	| 88 3E F0 AE |
+	| 88 6D 30 5E |
+	| 79 D4 85 73 |
+	| 3B DE F8 40 |
+---
+Mixed columns (MixColumns) of
+'Diffused matrix of round 9' to
+'Mixed matrix of round 9' ↘
+	| 64 67 76 42 |
+	| A4 85 5A 02 |
+	| F2 E4 B8 0F |
+	| EB B1 50 42 |
+---
+Merged (XOR)
+'Mixed matrix of round 9' with
+'Round key' ↘
+	| AE A6 A0 D4 |
+	| 97 D8 A6 C5 |
+	| 4D 7D 7A D9 |
+	| EF ED 05 06 |
+to 'Final matrix of round 9' ↘
+	| 64 67 76 42 |
+	| A4 85 5A 02 |
+	| F2 E4 B8 0F |
+	| EB B1 50 42 |
+---
+Confused (sbox, SubBytes)
+'Result matrix of previous round 9' ↘
+	| 64 67 76 42 |
+	| A4 85 5A 02 |
+	| F2 E4 B8 0F |
+	| EB B1 50 42 |
+to
+'Confused matrix of round 10' ↘
+	| 43 85 38 2C |
+	| 49 97 BE 77 |
+	| 89 69 6C 76 |
+	| E9 C8 53 2C |
+---
+Diffused (ShiftRows)
+'Confused matrix of round 10'
+to
+'Diffused matrix of round 10' ↘
+	| 43 85 38 2C |
+	| 97 BE 77 49 |
+	| 6C 76 89 69 |
+	| 2C E9 C8 53 |
+---
+Merged (XOR)
+'Diffused matrix of round 10' with
+'Round key' ↘
+	| 3E 98 38 EC |
+	| A2 7A DC 19 |
+	| 22 5F 25 FC |
+	| A7 4A 4F 49 |
+to 'Final matrix' ↘
+	| 7D 1D 00 C0 |
+	| 35 C4 AB 50 |
+	| 4E 29 AC 95 |
+	| 8B A3 87 1A |
+=> Result:
+'Rotated' ↘
+	| 7D 35 4E 8B |
+	| 1D C4 29 A3 |
+	| 00 AB AC 87 |
+	| C0 50 95 1A |
+'Flattened' → ['7D', '35', '4E', '8B', '1D', 'C4', '29', 'A3', '00', 'AB', 'AC', '87', 'C0', '50', '95', '1A']
+'Joined' → 7D 35 4E 8B 1D C4 29 A3 00 AB AC 87 C0 50 95 1A

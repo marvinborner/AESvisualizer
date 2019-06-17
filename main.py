@@ -31,23 +31,24 @@ def shift_matrix(matrix):
     return matrix
 
 
-def key_expansion(round_key):
-    round_keys = [round_key]
-    print(round_key)
+def key_expansion(key_matrix):
+    round_keys = [key_matrix]
+    round_key = key_matrix[:]
     for r in range(0, 10):
+        new_key = round_key.copy()
         last = round_key[3]
-
-        round_key[3] = round_last(round_key[3], r)
-        round_key[0] = xor_matrix(round_key[0], round_key[3])
-        round_key[1] = xor_matrix(round_key[1], round_key[0])
-        round_key[2] = xor_matrix(round_key[2], round_key[1])
-        round_key[3] = xor_matrix(last, round_key[2])
-
-        print(round_key)
-        round_keys.append(round_key)
+        new_key[3] = round_last(new_key[3], r)
+        new_key[0] = xor_matrix(new_key[0], new_key[3])
+        new_key[1] = xor_matrix(new_key[1], new_key[0])
+        new_key[2] = xor_matrix(new_key[2], new_key[1])
+        new_key[3] = xor_matrix(last, new_key[2])
+        round_key = new_key
+        round_keys += [new_key]
+    return round_keys
 
 
 def xor_matrix(first, second):
+    first = first.copy()
     for i in range(4):
         first[i] = first[i] ^ second[i]
     return first

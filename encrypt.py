@@ -1,5 +1,6 @@
 #!/usr/bin/python
 import copy
+import sys
 
 from constants import round_constants
 from constants import sbox
@@ -99,52 +100,18 @@ def encrypt(text, passphrase):
     round_keys = key_expansion(key_matrix)
     merged_matrix = xor_matrices(key_matrix, text_matrix)
 
-    print("XORing\n{0}\nwith {1}".format(matrix(text_matrix, text), matrix(key_matrix, passphrase)))
-    print("Result: ↘\n{0}".format(matrix(merged_matrix)))
-    print("---\nExpanded key {0}\nto".format(matrix(key_matrix, passphrase)))
-    print("{0}\n[Keys 2..9]\n{1}".format(
-        matrix(round_keys[1], "Key 1"),
-        matrix(round_keys[10], "Key 10")
-    ))
-
     # 9 intermediate rounds (+1 round without mixing) for 128 Bit key size
     for r in range(10):
         confused_matrix = confusion(copy.deepcopy(merged_matrix))
         diffused_matrix = diffusion(copy.deepcopy(confused_matrix))
-        print("---\nConfused (sbox, SubBytes)\n{0}\nto\n{1}".format(
-            matrix(merged_matrix, "Result matrix of previous round " + str(r)),
-            matrix(confused_matrix, "Confused matrix of round " + str(r + 1))
-        ))
-        print("---\nDiffused (ShiftRows)\n'Confused matrix of round {0}'\nto\n{1}".format(
-            r + 1,
-            matrix(diffused_matrix, "Diffused matrix of round " + str(r + 1))
-        ))
 
         if r == 9:
             merged_matrix = xor_matrices(diffused_matrix, round_keys[r + 1])
-            print("---\nMerged (XOR)\n'Diffused matrix of round {0}' with\n{1}\nto {2}".format(
-                r + 1,
-                matrix(round_keys[r + 1], "Round key"),
-                matrix(merged_matrix, "Final matrix")
-            ))
         else:
             mixed_matrix = mix_columns(diffused_matrix)
             merged_matrix = xor_matrices(mixed_matrix, round_keys[r + 1])
-            print("---\nMixed columns (MixColumns) of\n'Diffused matrix of round {0}' to\n{1}".format(
-                r + 1,
-                matrix(merged_matrix, "Mixed matrix of round " + str(r + 1))
-            ))
-            print("---\nMerged (XOR)\n'Mixed matrix of round {0}' with\n{1}\nto {2}".format(
-                r + 1,
-                matrix(round_keys[r + 1], "Round key"),
-                matrix(merged_matrix, "Final matrix of round " + str(r + 1))
-            ))
     flat_matrix = [int_to_hex_string(item) for sublist in merged_matrix for item in sublist]
-    print("=> Result:\n{0}\n'Flattened' → {1}\n'Joined' → {2}".format(
-        matrix([list(reversed(element)) for element in list(zip(*reversed(copy.deepcopy(merged_matrix))))], "Rotated"),
-        flat_matrix,
-        " ".join(flat_matrix)
-    ))
+    print(" ".join(flat_matrix))
 
 
 def confusion(merged_matrix):
@@ -222,21 +189,4 @@ def xor_matrices(first, second):
     return first
 
 
-def matrix(matrix_array, string=""):
-    """
-    Visualizes matrix arrays
-    :param matrix_array: 2x2 matrix array
-    :param string: Note of the array
-    :return: Printable string representation
-    """
-    new_array = [list(reversed(element)) for element in list(zip(*reversed(copy.deepcopy(matrix_array))))]
-    for i in range(len(new_array)):
-        new_array[i].insert(0, "\t|")
-    output = ""
-    if string != "":
-        output += "'{0}' ↘\n".format(string)
-    output += " |\n".join([" ".join([int_to_hex_string(cell) for cell in row]) for row in new_array]) + " |"
-    return output
-
-
-encrypt("ATTACK AT DAWN!", "SOME 128 BIT KEY")
+encrypt(sys.argv[1], sys.argv[2])

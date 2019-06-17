@@ -32,6 +32,7 @@ def text_to_hex(text):
     hex_array = []
     for char in text:
         hex_array.append(ord(char))
+    hex_array = hex_array + [0x01] * (16 - len(hex_array))
     return hex_array
 
 
@@ -87,16 +88,17 @@ def encrypt(text, passphrase):
     round_keys = key_expansion(key_matrix)
     merged_matrix = xor_matrices(key_matrix, text_matrix)
     # 9 intermediate rounds for 128 Bit key size
-    for i in range(1):
+    for r in range(1):
         confused_matrix = confusion(merged_matrix)
         diffused_matrix = diffusion(confused_matrix)
         mixed_matrix = mix_columns(diffused_matrix)
-        merged_matrix = xor_matrices(merged_matrix, mixed_matrix)
+        merged_matrix = xor_matrices(mixed_matrix, round_keys[r])
+        pprint(mixed_matrix)
 
 
 def confusion(merged_matrix):
     """
-    Applies confusion by running bytes through sbox
+    Applies confusion by running bytes through sbox (SubBytes)
     :param merged_matrix: Merged matrix of key and text
     :return: New "confused" matrix
     """
@@ -111,7 +113,7 @@ def confusion(merged_matrix):
 
 def diffusion(merged_matrix):
     """
-    Shifts the merged matrix to the left
+    Shifts the merged matrix to the left (ShiftRows)
     :param merged_matrix: Merged matrix of key and text
     :return: New "diffused" matrix
     """
@@ -128,11 +130,21 @@ def diffusion(merged_matrix):
 
 def mix_columns(merged_matrix):
     """
-    Mixes columns with AES MixColumns algorithm
+    Mixes columns with AES MixColumns algorithm (MixColumns)
     :param merged_matrix: Merged matrix of key and text
     :return: New "mixed" matrix
     """
-    return merged_matrix  # TODO
+    merged_matrix = merged_matrix.copy()
+    magic = lambda x: (((x << 1) ^ 0x1B) & 0xFF) if (x & 0x80) else (x << 1)
+    for i in range(4):
+        a = merged_matrix[i]
+        t = a[0] ^ a[1] ^ a[2] ^ a[3]
+        u = a[0]
+        a[0] ^= t ^ magic(a[0] ^ a[1])
+        a[1] ^= t ^ magic(a[1] ^ a[2])
+        a[2] ^= t ^ magic(a[2] ^ a[3])
+        a[3] ^= t ^ magic(a[3] ^ u)
+    return merged_matrix
 
 
 def xor_matrix(first, second):
@@ -164,4 +176,4 @@ def xor_matrices(first, second):
 test_key = text_to_hex("Thats my Kung Fu")
 test_text = text_to_hex("Two One Nine Two")
 
-encrypt("ATTACK AT DAWN! ", "SOME 128 BIT KEY")
+encrypt("ATTACK AT DAWN!", "SOME 128 BIT KEY")

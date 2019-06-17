@@ -115,9 +115,13 @@ def diffusion(merged_matrix):
     :param merged_matrix: Merged matrix of key and text
     :return: New "diffused" matrix
     """
-    merged_matrix = merged_matrix.copy()
+    # Rotate matrix CCW
+    merged_matrix = [list(element) for element in list(zip(*reversed(merged_matrix)))]
+    # Shift matrix
     for i in range(matrix_size):
         merged_matrix[i] = merged_matrix[i][-i:] + merged_matrix[i][:-i]
+    # Rotate matrix back (CW)
+    merged_matrix = [list(element)[::-1] for element in list(zip(*reversed(merged_matrix)))][::-1]
     pprint(merged_matrix)
     return merged_matrix
 

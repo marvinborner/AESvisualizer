@@ -1,7 +1,5 @@
 #!/usr/bin/python
 
-from pprint import pprint
-
 from constants import round_constants
 from constants import sbox
 
@@ -21,6 +19,15 @@ def hex_to_matrix(hex_array):
         else:
             matrix[int(i / matrix_size)].append(hex_array[i])
     return matrix
+
+
+def int_to_hex_string(number):
+    """
+    Converts an integer to it's regarding hex representation
+    :param number: Number to convert as base-10 integer
+    :return: string of hex representation
+    """
+    return "%0.2X" % number
 
 
 def text_to_hex(text):
@@ -81,19 +88,23 @@ def encrypt(text, passphrase):
     Encrypts a text using a 128-Bit passphrase
     :param text: Plain text
     :param passphrase: 128-Bit passphrase (16 chars)
-    :return: Encrypted text
+    :return: Encrypted text as hex
     """
     key_matrix = hex_to_matrix(text_to_hex(passphrase))
     text_matrix = hex_to_matrix(text_to_hex(text))
     round_keys = key_expansion(key_matrix)
     merged_matrix = xor_matrices(key_matrix, text_matrix)
     # 9 intermediate rounds for 128 Bit key size
-    for r in range(1):
+    for r in range(10):
         confused_matrix = confusion(merged_matrix)
         diffused_matrix = diffusion(confused_matrix)
-        mixed_matrix = mix_columns(diffused_matrix)
-        merged_matrix = xor_matrices(mixed_matrix, round_keys[r])
-        pprint(mixed_matrix)
+        if r == 9:
+            merged_matrix = xor_matrices(diffused_matrix, round_keys[r + 1])
+        else:
+            mixed_matrix = mix_columns(diffused_matrix)
+            merged_matrix = xor_matrices(mixed_matrix, round_keys[r + 1])
+    flat_matrix = [int_to_hex_string(item) for sublist in merged_matrix for item in sublist]
+    return " ".join(flat_matrix)
 
 
 def confusion(merged_matrix):
@@ -102,12 +113,10 @@ def confusion(merged_matrix):
     :param merged_matrix: Merged matrix of key and text
     :return: New "confused" matrix
     """
-    pprint(merged_matrix)
     merged_matrix = merged_matrix.copy()
     for i in range(matrix_size):
         for j in range(matrix_size):
             merged_matrix[i][j] = sbox[merged_matrix[i][j]]
-    pprint(merged_matrix)
     return merged_matrix
 
 
@@ -124,7 +133,6 @@ def diffusion(merged_matrix):
         merged_matrix[i] = merged_matrix[i][-i:] + merged_matrix[i][:-i]
     # Rotate matrix back (CW)
     merged_matrix = [list(element)[::-1] for element in list(zip(*reversed(merged_matrix)))][::-1]
-    pprint(merged_matrix)
     return merged_matrix
 
 
@@ -173,7 +181,4 @@ def xor_matrices(first, second):
     return first
 
 
-test_key = text_to_hex("Thats my Kung Fu")
-test_text = text_to_hex("Two One Nine Two")
-
-encrypt("ATTACK AT DAWN!", "SOME 128 BIT KEY")
+print(encrypt("Two One Nine Two", "Thats my Kung Fu"))

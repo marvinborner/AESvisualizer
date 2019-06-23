@@ -39,8 +39,7 @@
 }
 
 table, tbody, tr {
-    border: 0;
-!important;
+    border: 0 !important;
 }
 
 td, th {

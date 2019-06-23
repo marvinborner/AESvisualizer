@@ -1,0 +1,50 @@
+.left {
+    float: left;
+    width: 50%;
+}
+
+.right {
+    float: right;
+    width: 50%;
+}
+
+.hidden {
+    display: none !important;
+}
+
+.fixedCenter {
+    position: absolute;
+    left: 0;
+    right: 0;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.fixedFirstThird {
+    position: absolute;
+    left: 35%;
+}
+
+.fixedThird {
+    position: absolute;
+    right: 35%;
+}
+
+.description {
+    margin-top: 16px;
+}
+
+.history .fragment:not(.visible) {
+    display: none;
+}
+
+table, tbody, tr {
+    border: 0;
+!important;
+}
+
+td, th {
+    text-align: center !important;
+    border: 1px solid white !important;
+    border-collapse: collapse;
+}

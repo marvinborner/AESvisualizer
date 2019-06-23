@@ -110,7 +110,6 @@ def encrypt(text, passphrase):
         else:
             mixed_matrix = mix_columns(diffused_matrix)
             merged_matrix = xor_matrices(mixed_matrix, round_keys[r + 1])
-            print(" ".join([int_to_hex_string(item) for sublist in merged_matrix for item in sublist]))
     flat_matrix = [int_to_hex_string(item) for sublist in merged_matrix for item in sublist]
     print(" ".join(flat_matrix))
 

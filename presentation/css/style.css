@@ -30,6 +30,7 @@
     right: 35%;
 }
 
+<<<<<<< HEAD
 .description {
     margin-top: 16px;
 }
@@ -38,6 +39,8 @@
     display: none;
 }
 
+=======
+>>>>>>> origin/master
 table, tbody, tr {
     border: 0;
 !important;
@@ -47,4 +50,11 @@ td, th {
     text-align: center !important;
     border: 1px solid white !important;
     border-collapse: collapse;
+<<<<<<< HEAD
+=======
+}
+
+.description {
+    margin-top: 16px;
+>>>>>>> origin/master
 }
